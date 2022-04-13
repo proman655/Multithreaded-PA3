@@ -3,7 +3,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 import java.io.*;
 
-public class BdayPresentsParty extends Thread
+public class BirthdayPresentsParty extends Thread
 {
     public static ArrayList<Servant> threads = new ArrayList<>();
     public AtomicInteger cards= new AtomicInteger();
@@ -15,13 +15,13 @@ public class BdayPresentsParty extends Thread
     int presents;
     int numOfThreads;
 
-    BdayPresentsParty()
+    BirthdayPresentsParty()
     {
         this.presents = 500_000;
         this.numOfThreads = 4;
     }
 
-    void runServants(BdayPresentsParty mainThread) throws InterruptedException
+    void runServants(BirthdayPresentsParty mainThread) throws InterruptedException
     {
         // Threads are created, added to arraylist, and run
         for (int i = 1; i <= this.numOfThreads; i++)
@@ -40,7 +40,7 @@ public class BdayPresentsParty extends Thread
     public static void main(String args[]) throws InterruptedException
     {
         // Instance of mainthread created
-        BdayPresentsParty mainThread = new BdayPresentsParty();
+        BirthdayPresentsParty mainThread = new BirthdayPresentsParty();
 
         for (int i = 1; i <= mainThread.presents; i++)
             mainThread.gifts.push(i);
@@ -60,9 +60,9 @@ public class BdayPresentsParty extends Thread
 class Servant extends Thread
 {
     int threadNum;
-    BdayPresentsParty mainThread;
+    BirthdayPresentsParty mainThread;
 
-    Servant(int threadNum, BdayPresentsParty mainThread)
+    Servant(int threadNum, BirthdayPresentsParty mainThread)
     {
         this.threadNum = threadNum;
         this.mainThread = mainThread;
