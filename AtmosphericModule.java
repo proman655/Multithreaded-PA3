@@ -1,3 +1,7 @@
+// Pedro Roman
+// COP4520
+// PA3, Problem 2
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -157,7 +161,7 @@ public class AtmosphericModule extends Thread {
 class Sensor extends Thread {
     static AtomicInteger iterations = new AtomicInteger();
     static AtomicBoolean hourPassed = new AtomicBoolean();
-    int threadNum, hour;
+    int threadNum, hour = 1;
     boolean checked;
     boolean isReporter = false;
     AtmosphericModule mainThread;
@@ -181,15 +185,6 @@ class Sensor extends Thread {
                 return false;
 
         return true;
-    }
-
-    boolean uncheckedThreads()
-    {
-        for (int i = 0; i < 8; i++)
-            if (this.mainThread.getThread(this.threadNum).checked)
-                return true;
-
-        return false;
     }
 
     @Override
@@ -224,7 +219,8 @@ class Sensor extends Thread {
             this.checked = false;
             iterations.getAndIncrement();
 
-            if (this.mainThread.recordings.size() == 480)
+            if (iterations.get() == 480) System.out.println("woo");
+            if (iterations.get()/this.hour == 480)
                 hourPassed.set(true);
 
             try 
@@ -242,20 +238,19 @@ class Sensor extends Thread {
                 this.mainThread.lock.lock();
                 try
                 {
-                    this.mainThread.printReport(++this.hour);
+                    this.mainThread.printReport(this.hour++);
                     hourPassed.set(false);
                 }
                 finally
                 {
 
                     this.mainThread.lock.unlock();
-                }
-                
+                }   
             }
 
             try 
             {
-                Thread.sleep(20);
+                Thread.sleep(10);
             } catch (InterruptedException e)
             {
                 e.printStackTrace();
