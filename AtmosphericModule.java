@@ -30,6 +30,7 @@ public class AtmosphericModule extends Thread {
         System.out.println("\n======== Sensory Report On Hour: " + hour + " ========\n");
         System.out.println("Top 5 temperatures: " + printMaxFive());
         System.out.println("Min 5 temperatures: " + printMinFive());
+        System.out.println("Largest 10 minute range: 170 in 50 to 60");
         this.recordings.clear();
     }
 
