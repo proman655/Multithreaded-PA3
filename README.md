@@ -61,6 +61,6 @@ This implementation used a Reentrant Lock system to maintain mutual exclusion. A
 Processor used for testing: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz (8 CPUs), ~2.8GHz <br/>
 Ubuntu was used for compiling
 
-My experimental evaulation for the first problem consisted of testing a various amount of methods and data structures to see which one gave us the most accurate and efficient results as stated in the Proof of Correctness. 
+My experimental evaulation for the first problem consisted of testing a various amount of methods and data structures to see which one gave us the most accurate and efficient results as stated in the Proof of Correctness. Determining which implementation of a concurrent linked list to use took a while. We got our solution from the book. Our implementation garaunteed that the threads were accessing the linked list in an appropriate manner.
 
-For the second problem, I used the thread.Sleep() function to sort of synchronize the threads after each hour has passed. This is a janky solutionm, but it was the only one I could figure out that would fix the synchronization issue.
+For the second problem, I used the thread.Sleep() function to sort of synchronize the threads after each hour has passed. This is a janky solution, but it was the only one I could figure out that would fix the synchronization issue. That was the main struggle in this problem. Since there were 8 threads working at the same time and stuff had to be printed out at certain moments within the run-time, it made it difficult to print at the correct times, and make sure that the shared resource is not being altered too early or too late.
