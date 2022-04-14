@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 import java.io.*;
@@ -25,32 +26,54 @@ public class AtmosphericModule extends Thread {
         return threads.get(index - 1);
     }
 
-    void printReport()
+    void printReport(int hour)
     {
-        System.out.println("Top 5 temperatures: " + Arrays.toString(printMaxFive()));
-        System.out.println("Min 5 temperatures: " + Arrays.toString(printMinFive()));
+        //System.out.println("======== Sensory Report After " + hour + " hours ========");
+        System.out.println("Top 5 temperatures: " + printMaxFive());
+        System.out.println("Min 5 temperatures: " + printMinFive());
+        this.recordings.clear();
     }
 
-    int[] printMaxFive()
+// david
+    ArrayList<Integer> printMaxFive()
     {
-        int [] topFive = new int[5];
+        ArrayList<Integer> topFive = new ArrayList<>();
         for (int i = 0; i < 5; i++)
-            topFive[i] = maxFive.poll();
+        {
+            int num = maxFive.poll();
+            if (topFive.contains(num))
+            {
+                i--;
+                continue;
+            }
+
+            topFive.add(num);
+        }
 
         maxFive.clear();
         return topFive;
     }
 
-    int[] printMinFive()
+    ArrayList<Integer> printMinFive()
     {
-        int [] topFive = new int[5];
+        ArrayList<Integer> topFive = new ArrayList<>();
         for (int i = 0; i < 5; i++)
-            topFive[i] = minFive.poll();
+        {
+            int num = minFive.poll();
+            if (topFive.contains(num))
+            {
+                i--;
+                continue;
+            }
+
+            topFive.add(num);
+        }
 
         minFive.clear();
         return topFive;
     }
 
+// pedros
     ArrayList<Integer> getTopFive(ArrayList<Integer> recordings) 
     {
         PriorityQueue<Integer> maxHeap = new PriorityQueue<>();
@@ -109,17 +132,17 @@ public class AtmosphericModule extends Thread {
             System.out.print("Please input an integer value");
         }
 
-        int hoursToIter = input.nextInt();
+        int hours = input.nextInt();
 
         input.close();
 
-        if (hoursToIter <= 0)
+        if (hours <= 0 || hours > 45)
         {
             System.out.println("Must be more than 0 hours");
             return;
         }
         // Instance of mainthread created
-        AtmosphericModule mainThread = new AtmosphericModule(hoursToIter);
+        AtmosphericModule mainThread = new AtmosphericModule(hours);
 
         final long startTime = System.currentTimeMillis();
 
@@ -133,7 +156,8 @@ public class AtmosphericModule extends Thread {
 
 class Sensor extends Thread {
     static AtomicInteger iterations = new AtomicInteger();
-    int threadNum;
+    static AtomicBoolean hourPassed = new AtomicBoolean();
+    int threadNum, hour;
     boolean checked;
     boolean isReporter = false;
     AtmosphericModule mainThread;
@@ -200,6 +224,9 @@ class Sensor extends Thread {
             this.checked = false;
             iterations.getAndIncrement();
 
+            if (this.mainThread.recordings.size() == 480)
+                hourPassed.set(true);
+
             try 
             {
                 Thread.sleep(10);
@@ -207,12 +234,32 @@ class Sensor extends Thread {
             {
                 e.printStackTrace();
             }
-        }
 
-        if (this.isReporter && (mainThread.recordings.size()/mainThread.hours == 480))
-        {
-            System.out.println(mainThread.getTopFive(mainThread.recordings));
-            // this.mainThread.printReport();
+            //System.out.println(this.mainThread.recordings.size());
+            if (this.isReporter && hourPassed.get())
+            {
+                //System.out.println(mainThread.getTopFive(mainThread.recordings));
+                this.mainThread.lock.lock();
+                try
+                {
+                    this.mainThread.printReport(++this.hour);
+                    hourPassed.set(false);
+                }
+                finally
+                {
+
+                    this.mainThread.lock.unlock();
+                }
+                
+            }
+
+            try 
+            {
+                Thread.sleep(10);
+            } catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }
