@@ -28,7 +28,7 @@ public class AtmosphericModule extends Thread {
 
     void printReport(int hour)
     {
-        //System.out.println("======== Sensory Report After " + hour + " hours ========");
+        System.out.println("\n======== Sensory Report After " + hour + " hours ========\n");
         System.out.println("Top 5 temperatures: " + printMaxFive());
         System.out.println("Min 5 temperatures: " + printMinFive());
         this.recordings.clear();
@@ -255,7 +255,7 @@ class Sensor extends Thread {
 
             try 
             {
-                Thread.sleep(10);
+                Thread.sleep(20);
             } catch (InterruptedException e)
             {
                 e.printStackTrace();
