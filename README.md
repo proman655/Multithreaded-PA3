@@ -27,35 +27,28 @@ or
 # Problem Statement
 Problem 1: The Birthday Presents Party (50 points)
 
-The Minotaur invited N guests to his birthday party. When the guests arrived, he made the following announcement.
+The Minotaur’s birthday party was a success. The Minotaur received a lot of presents from his guests. The next day he decided to sort all of his presents and start writing “Thank you” cards. Every present had a tag with a unique number that was associated with the guest who gave it. Initially all of the presents were thrown into a large bag with no particular order. The Minotaur wanted to take the presents from this unordered bag and create a chain of presents hooked to each other with special links (similar to storing elements in a linked-list). In this chain (linked-list) all of the presents had to be ordered according to their tag numbers in increasing order. The Minotaur asked 4 of his servants to help him with creating the chain of presents and writing the cards to his guests. Each servant would do one of three actions in no particular order:
 
-The guests may enter his labyrinth, one at a time and only when he invites them to do so. At the end of the labyrinth, the Minotaur placed a birthday cupcake on a plate. When a guest finds a way out of the labyrinth, he or she may decide to eat the birthday cupcake or leave it. If the cupcake is eaten by the previous guest, the next guest will find the cupcake plate empty and may request another cupcake by asking the Minotaur’s servants. When the servants bring a new cupcake the guest may decide to eat it or leave it on the plate.
+Take a present from the unordered bag and add it to the chain in the correct location by hooking it to the predecessor’s link. The servant also had to make sure that the newly added present is also linked with the next present in the chain.
+Write a “Thank you” card to a guest and remove the present from the chain. To do so, a servant had to unlink the gift from its predecessor and make sure to connect the predecessor’s link with the next gift in the chain.
+Per the Minotaur’s request, check whether a gift with a particular tag was present in the chain or not; without adding or removing a new gift, a servant would scan through the chain and check whether a gift with a particular tag is already added to the ordered chain of gifts or not.
+As the Minotaur was impatient to get this task done quickly, he instructed his servants not to wait until all of the presents from the unordered bag are placed in the chain of linked and ordered presents. Instead, every servant was asked to alternate adding gifts to the ordered chain and writing “Thank you” cards. The servants were asked not to stop or even take a break until the task of writing cards to all of the Minotaur’s guests was complete.
 
-The Minotaur’s only request for each guest is to not talk to the other guests about her or his visit to the labyrinth after the game has started. The guests are allowed to come up with a strategy prior to the beginning of the game. There are many birthday cupcakes, so the Minotaur may pick the same guests multiple times and ask them to enter the labyrinth. Before the party is over, the Minotaur wants to know if all of his guests have had the chance to enter his labyrinth. To do so, the guests must announce that they have all visited the labyrinth at least once.
+After spending an entire day on this task the bag of unordered presents and the chain of ordered presents were both finally empty!
 
-Now the guests must come up with a strategy to let the Minotaur know that every guest entered the Minotaur’s labyrinth. It is known that there is already a birthday cupcake left at the labyrinth’s exit at the start of the game. How would the guests do this and not disappoint his generous and a bit temperamental host?
+Unfortunately, the servants realized at the end of the day that they had more presents than “Thank you” notes. What could have gone wrong?
 
-Create a program to simulate the winning strategy (protocol) where each guest is represented by one running thread. In your program you can choose a concrete number for N or ask the user to specify N at the start.
+Can we help the Minotaur and his servants improve their strategy for writing “Thank you” notes?
 
-Problem 2: Atmospheric Temperature Reading Module (50 points)
+Design and implement a concurrent linked-list that can help the Minotaur’s 4 servants with this task. In your test, simulate this concurrent “Thank you” card writing scenario by dedicating 1 thread per servant and assuming that the Minotaur received 500,000 presents from his guests.
 
-The Minotaur decided to show his favorite crystal vase to his guests in a dedicated showroom with a single door. He did not want many guests to gather around the vase and accidentally break it. For this reason, he would allow only one guest at a time into the showroom. He asked his guests to choose from one of three possible strategies for viewing the Minotaur’s favorite crystal vase:
+Problem 2: Atmospheric Temperature Reading Module (50 Points)
 
-1) Any guest could stop by and check whether the showroom’s door is open at any time and try to enter the room. While this would allow the guests to roam around the castle and enjoy the party, this strategy may also cause large crowds of eager guests to gather around the door. A particular guest wanting to see the vase would also have no guarantee that she or he will be able to do so and when.
+You are tasked with the design of the module responsible for measuring the atmospheric temperature of the next generation Mars Rover, equipped with a multi-core CPU and 8 temperature sensors. The sensors are responsible for collecting temperature readings at regular intervals and storing them in shared memory space. The atmospheric temperature module has to compile a report at the end of every hour, comprising the top 5 highest temperatures recorded for that hour, the top 5 lowest temperatures recorded for that hour, and the 10-minute interval of time when the largest temperature difference was observed. The data storage and retrieval of the shared memory region must be carefully handled, as we do not want to delay a sensor and miss the interval of time when it is supposed to conduct temperature reading. 
 
-2) The Minotaur’s second strategy allowed the guests to place a sign on the door indicating when the showroom is available. The sign would read “AVAILABLE” or “BUSY.” Every guest is responsible to set the sign to “BUSY” when entering the showroom and back to “AVAILABLE” upon exit. That way guests would not bother trying to go to the showroom if it is not available.
-
-3) The third strategy would allow the quests to line in a queue. Every guest exiting the room was responsible to notify the guest standing in front of the queue that the showroom is available. Guests were allowed to queue multiple times.
-
-Which of these three strategies should the guests choose? Please discuss the advantages and disadvantages.
-
-Implement the strategy/protocol of your choice where each guest is represented by 1 running thread. You can choose a concrete number for the number of guests or ask the user to specify it at the start.
+Design and implement a solution using 8 threads that will offer a solution for this task. Assume that the temperature readings are taken every 1 minute. In your solution, simulate the operation of the temperature reading sensor by generating a random number from -100F to 70F at every reading. In your report, discuss the efficiency, correctness, and progress guarantee of your program.
 
 # Proof of Correctness:
-
-Worth mentioning: <br/>
-Guest == thread <br/>
-Labrynth == thread run() while-loop
 
 Problem 1: <br/>
 My implementation uses a Reentrant Lock to ensure that only one thread is in the "labrynth" while-loop at a time. The guests are able to enter the labrynth multiple times, as stated in the problem description. The strategy behind finding out at what point every guest has eaten a cake is determined before anyting begins. A guest at random is chosen to be the "decider" guest. This decider guest will keep track of how many times he finds the cake missing in the labrynth. The other guests should only eat the cake one time and one time only. Using this strategy, the guests won't have to  communicate to eachother. Once the decider guest finds the cake missing an "n guests" amount of times, he can deduce that all guests have eaten the cake once, and announces it to the Minotaur, ending the game and breaking all threads out of their while-loops.
@@ -71,9 +64,4 @@ For this problem, I implemented the second strategy that is mentioned in the pro
 Processor used for testing: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz (8 CPUs), ~2.8GHz <br/>
 Ubuntu was used for compiling
 
-My experimental evaluation throughout this assignment was not as tedious as the first programming assignment. Race conditions would occur at times, as well as infinite loops cause by unclosed conditions. In terms of run-time, both solutions seem to run at reasonable times. The vase solution seemed to run a bit slower than the birthday party, but it makes sense.
-
-At n = 1000, MinotaurCrystalVase ran at ~5000ms <br/>
-at n = 1000, MinotaurBirthdayParty ran at ~300ms 
-
-I believed my runtimes were slowed down a bit due to the fact that I used Ubuntu to compile and run my solutions. I believe that they will run faster if ran natively.
+My experimental evaulation for the first problem consisted of testing a various amount of methods and data structures to see which one gave us the most accurate and efficient results as stated in the Proof of Correctness. 
