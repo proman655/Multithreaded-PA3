@@ -51,10 +51,10 @@ Design and implement a solution using 8 threads that will offer a solution for t
 # Proof of Correctness:
 
 Problem 1: <br/>
-My implementation uses a Lock Free Linked List to store the elements in the chain, in order. I also use an Atomic Integer variable to record the amount of cards that are produced after removing a gift. I used a stack to store the unordered bag of gifts. This bag was constructed by pushing an n amount of elements to a stack and then shuffling that stack. As the threads call upon the run function, they enter a while loop that wil keep them in there until everything is finished. Threads are responsible for 3 tasks concurrently, one is to remove the gifts from the bag stack and put it into the ordered lock free linked list. Another task is to "write a thank you note" and remove that gift from the lock free linked list. The final task that can be done concurrently is to check if a gift is in the chain. In distributing the threads to do these 3 tasks, a solution with a decent runtime can be accomplished.
+My implementation uses a Lock Free Linked List to store the elements in the chain, in order. I also use an Atomic Integer variable to record the amount of cards that are produced after removing a gift. I used a stack to store the unordered bag of gifts. This bag was constructed by pushing an n amount of elements to a stack and then shuffling that stack. As the threads call upon the run function, they enter a while loop that will keep them in there until everything is finished. Threads are responsible for 3 tasks concurrently, one is to remove the gifts from the bag stack and put it into the ordered lock free linked list. Another task is to "write a thank you note" and remove that gift from the lock free linked list. The final task that can be done concurrently is to check if a gift is in the chain. In distributing the threads to do these 3 tasks, a solution with a decent runtime can be accomplished.
 
 Problem 2: <br/>
-
+This implementation used a Reentrant Lock system to maintain mutual exclusion
 
 
 # Experimental Evaluation:
@@ -62,3 +62,5 @@ Processor used for testing: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz (8 CP
 Ubuntu was used for compiling
 
 My experimental evaulation for the first problem consisted of testing a various amount of methods and data structures to see which one gave us the most accurate and efficient results as stated in the Proof of Correctness. 
+
+For the second problem, I used the thread.Sleep() function to sort of synchronize the threads after each hour has passed. This is a janky solutionm, but it was the only one I could figure out that would fix the synchronization issue.
