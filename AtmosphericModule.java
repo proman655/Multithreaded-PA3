@@ -25,11 +25,6 @@ public class AtmosphericModule extends Thread {
         this.hours = hoursToIter;
     }
 
-    Sensor getThread(int index)
-    {
-        return threads.get(index - 1);
-    }
-
     void printReport(int hour)
     {
         System.out.println("\n======== Sensory Report After " + hour + " hours ========\n");
@@ -38,7 +33,11 @@ public class AtmosphericModule extends Thread {
         this.recordings.clear();
     }
 
-// david
+    Sensor getThread(int index)
+    {
+        return threads.get(index - 1);
+    }
+
     ArrayList<Integer> printMaxFive()
     {
         ArrayList<Integer> topFive = new ArrayList<>();
@@ -77,33 +76,6 @@ public class AtmosphericModule extends Thread {
         return topFive;
     }
 
-// pedros
-    ArrayList<Integer> getTopFive(ArrayList<Integer> recordings) 
-    {
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>();
-        ArrayList<Integer> fresh = new ArrayList<Integer>(); 
-
-        for(Integer element : recordings){
-            if(!fresh.contains(element)) {
-                fresh.add(element);
-            }
-        }
-
-        fresh.forEach(number -> {
-            maxHeap.add(number);
-
-            if(maxHeap.size() > 5){
-                maxHeap.poll();
-            }
-        });
-
-        ArrayList<Integer> top5List = new ArrayList<>(maxHeap);
-        Collections.reverse(top5List);
-
-        return top5List;
-    }
-
-    
     void runSensors(AtmosphericModule mainThread) throws InterruptedException {
         // Threads are created, added to arraylist, and run
         for (int i = 1; i <= this.numOfThreads; i++)
@@ -128,7 +100,7 @@ public class AtmosphericModule extends Thread {
         //Scanner object
         Scanner input = new Scanner(System.in);
 
-        System.out.print("Enter how many hours you wish to simulate [MAX 45 hours, more takes longer than 30s]: ");
+        System.out.print("Enter how many hours you wish to simulate ");
 
         while(!input.hasNextInt())
         {
@@ -192,8 +164,6 @@ class Sensor extends Thread {
     {
         while (iterations.get() < mainThread.hoursToIter)
         {
-            // System.out.println("minutes.get " + minutes.get());
-            // System.out.println("mainThread.hoursToIter " +  mainThread.hoursToIter);
 
             while (!checkThreads())
             {
@@ -207,7 +177,6 @@ class Sensor extends Thread {
                         this.mainThread.maxFive.add(rand);
                         this.mainThread.minFive.add(rand);
                         this.checked = true;
-                        // System.out.println("Thread " + this.threadNum + " has added " + rand + " to the list");
                     }
                     finally 
                     {
@@ -231,10 +200,8 @@ class Sensor extends Thread {
                 e.printStackTrace();
             }
 
-            //System.out.println(this.mainThread.recordings.size());
             if (this.isReporter && hourPassed.get())
             {
-                //System.out.println(mainThread.getTopFive(mainThread.recordings));
                 this.mainThread.lock.lock();
                 try
                 {
