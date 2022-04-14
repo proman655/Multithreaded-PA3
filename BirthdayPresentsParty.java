@@ -27,7 +27,7 @@ public class BirthdayPresentsParty extends Thread
 
     void runServants(BirthdayPresentsParty mainThread) throws InterruptedException
     {
-        // Threads are created, added to arraylist, and run
+        // Threads are created, added to arraylist, and ran
         for (int i = 1; i <= this.numOfThreads; i++)
             threads.add(new Servant(i, mainThread));
 
@@ -107,7 +107,6 @@ class Servant extends Thread
                         mainThread.lock.unlock();
                     }
 
-                    //System.out.println("Thread " + this.threadNum + " has gift " + gift + " gifts left: " + mainThread.gifts.size());
                     mainThread.chain.add(gift);
                     break;
                 case 2:
@@ -122,7 +121,6 @@ class Servant extends Thread
                     } finally {
                         mainThread.lock.unlock();
                     }
-                    //System.out.println("Thread " + this.threadNum + " removed gift " + gift + " gifts left: " + mainThread.gifts.size());
                     mainThread.chain.remove(gift);
                     mainThread.cards.getAndIncrement();
                     break;
