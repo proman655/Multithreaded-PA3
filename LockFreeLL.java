@@ -1,3 +1,7 @@
+// Pedro Roman
+// COP4520
+// PA3, Problem 2
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicMarkableReference;
 import java.io.*;

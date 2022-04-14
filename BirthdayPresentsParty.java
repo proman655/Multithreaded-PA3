@@ -1,3 +1,7 @@
+// Pedro Roman
+// COP4520
+// PA3, Problem 1
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
